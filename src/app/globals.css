@@ -1,0 +1,44 @@
+* {
+    margin: 0;
+}
+
+.background {
+    height: 100vh;
+    background-image: url("/fon.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.background::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+}
+
+.main {
+    width: 2000px;
+    height: 90vh;
+    background-color: rgba(255, 255, 255, 0.3);
+    margin: auto;
+    border-right: 1px solid;
+    border-bottom: 1px solid;
+    border-left: 1px solid;
+}
+
+@media (max-width: 1920px) {
+    .main {
+        width: 1720px;
+        height: 90vh;
+        background-color: rgba(255, 255, 255, 0.3);
+        margin: auto;
+        border-right: 1px solid;
+        border-bottom: 1px solid;
+        border-left: 1px solid;
+    }
+}
