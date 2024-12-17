@@ -6,7 +6,7 @@ const HeaderSearch = () => {
     return (
         <div>
             <header className={classes.header__wrapper}>
-                <Image src={'/logo.svg'} alt={'logo'} width={400} height={100} className={classes.header__logo}/>
+                <Image src={'/logo.svg'} alt={'logo'} width={400} height={100} className={classes.header__logo} priority/>
                 <nav className={classes.header__navPage}>
                     <button className={classes.header__buttonPage} id={'thisPage'}>
                         Поиск
