@@ -6,7 +6,6 @@ const port = 5000;
 
 app.use(cors());
 
-// Маршрут для поиска треков
 app.get('/search', async (req, res) => {
     try {
         const query = req.query.query;
@@ -22,11 +21,10 @@ app.get('/search', async (req, res) => {
             return res.status(500).json({ error: 'Invalid response from Deezer API' });
         }
 
-        // Отфильтровываем треки без preview_url
         const results = response.data.data.slice(0, 999).map((track) => {
             const previewUrl = track.preview;
             if (!previewUrl) {
-                return null; // Возвращаем null для треков без preview_url
+                return null;
             }
 
             return {
@@ -39,7 +37,7 @@ app.get('/search', async (req, res) => {
                 preview_url: previewUrl,
                 image_url: track.album.cover_medium,
             };
-        }).filter(track => track !== null); // Фильтруем null-значения
+        }).filter(track => track !== null);
 
         res.json(results);
     } catch (error) {

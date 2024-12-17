@@ -1,13 +1,21 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
-};
-
-module.exports = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
     images: {
-        domains: ['cdn-images.dzcdn.net'],
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'cdn-images.dzcdn.net',
+            },
+        ],
+    },
+    async rewrites() {
+        return [
+            {
+                source: '/api/deezer/:path*',
+                destination: 'https://api.deezer.com/:path*',
+            },
+        ];
     },
 };
 
-export default nextConfig;
+module.exports = nextConfig;

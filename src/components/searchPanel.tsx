@@ -16,7 +16,8 @@ const SearchPanel: React.FC = () => {
     const [query, setQuery] = useState<string>('');
     const [songs, setSongs] = useState<Song[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
-    const [isPlaying, setIsPlaying] = useState<boolean>(false);
+    const [currentSong, setCurrentSong] = useState<Song | null>(null); // Текущая песня
+    const [isPlaying, setIsPlaying] = useState<boolean>(false); // Статус воспроизведения
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -51,23 +52,27 @@ const SearchPanel: React.FC = () => {
         }
     }, [query]);
 
-    const handleSongClick = (previewUrl: string): void => {
+    const handleSongClick = (song: Song): void => {
         if (audioRef.current) {
-            // Если песня уже воспроизводится, ставим на паузу
-            if (!audioRef.current.paused) {
-                audioRef.current.pause();
-                setIsPlaying(false);
+            if (currentSong?.id === song.id) {
+                if (audioRef.current.paused) {
+                    audioRef.current.play();
+                    setIsPlaying(true);
+                } else {
+                    audioRef.current.pause();
+                    setIsPlaying(false);
+                }
+            } else {
+                if (isPlaying && audioRef.current) {
+                    audioRef.current.pause();
+                }
+
+                audioRef.current.src = song.preview_url;
+                audioRef.current.currentTime = 0;
+                audioRef.current.play();
+                setCurrentSong(song);
+                setIsPlaying(true);
             }
-
-            // Убираем текущий источник и обновляем на новый
-            audioRef.current.src = ''; // Очистка старого источника
-            audioRef.current.load(); // Перезагружаем аудио
-
-            // Устанавливаем новый источник и начинаем воспроизведение с начала
-            audioRef.current.src = previewUrl;
-            audioRef.current.currentTime = 0; // Устанавливаем начало песни
-            audioRef.current.play(); // Начинаем воспроизведение
-            setIsPlaying(true);
         }
     };
 
@@ -102,7 +107,7 @@ const SearchPanel: React.FC = () => {
                                 <section
                                     key={song.id}
                                     className={classes.songSection}
-                                    onClick={() => handleSongClick(song.preview_url)}
+                                    onClick={() => handleSongClick(song)}
                                 >
                                     <div className={classes.songContainer}>
                                         <Image
